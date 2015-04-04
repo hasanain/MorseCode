@@ -90,6 +90,7 @@ public class MainPanel extends JPanel {
 			while (scan.hasNextLine()) {
 				input.append(scan.nextLine());
 			}
+			inputArea.setText("");
 			inputArea.setText(input.toString());
 			outputArea.setText(mtr.translate(inputArea.getText()));
 		} catch (FileNotFoundException e) {
