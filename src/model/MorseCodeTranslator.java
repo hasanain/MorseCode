@@ -97,12 +97,19 @@ public class MorseCodeTranslator {
 		token = token.toLowerCase();
 		StringBuilder translation = new StringBuilder();
 		for (String s : token.split(" ")){
+			char lastChar = '\0';
 			for(char a : s.toCharArray()){
 				if(dictionary.get(a) != null){
 					translation.append(dictionary.get(a) + " ");
 				}
+				if(a == '\n'){
+					translation.append('\n');
+					lastChar = a;
+				}
 			}
-			translation.append(" | ");
+			if(lastChar != '\n'){
+				translation.append(" | ");
+			}
 		}
 		int limit = translation.length();
 		if(limit > 4){

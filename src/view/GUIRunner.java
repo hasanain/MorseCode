@@ -15,6 +15,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUIRunner {
@@ -105,6 +107,7 @@ public class GUIRunner {
 			StringBuilder input = new StringBuilder();
 			while (scan.hasNextLine()) {
 				input.append(scan.nextLine());
+				input.append('\n');
 			}
 			mainPanel.setInput("");
 			mainPanel.setInput(input.toString());
@@ -115,6 +118,13 @@ public class GUIRunner {
 
 	}
 	public static void main(String[] args) {
-		new GUIRunner();
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				new GUIRunner();
+				
+			}
+		});
 	}
 }
