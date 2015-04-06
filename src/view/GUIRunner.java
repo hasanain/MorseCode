@@ -31,7 +31,7 @@ public class GUIRunner {
 		menu = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem openButton = new JMenuItem("Open");
-		JMenuItem saveButton = new JMenuItem("Save");
+		JMenuItem saveButton = new JMenuItem("Save as");
 		JMenuItem exitButton = new JMenuItem("Exit");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Text files", "txt", "md", "html", "java", "tex");
