@@ -77,25 +77,24 @@ public class MainPanel extends JPanel {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			outputArea.setText(mtr.translate(inputArea.getText()));
+			translate();
 
 		}
-
 	}
-
-	public void openFile(File file, JFrame frame) {
-		try {
-			Scanner scan = new Scanner(file);
-			StringBuilder input = new StringBuilder();
-			while (scan.hasNextLine()) {
-				input.append(scan.nextLine());
-			}
-			inputArea.setText("");
-			inputArea.setText(input.toString());
-			outputArea.setText(mtr.translate(inputArea.getText()));
-		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(frame, "File not found!");
-		}
-
+	public void translate() {
+		outputArea.setText(mtr.translate(inputArea.getText()));
 	}
+	public String getInput() {
+		return inputArea.getText();
+	}
+	public void setInput(String toSet){
+		inputArea.setText(toSet);
+	}
+	public String getOutput() {
+		return outputArea.getText();
+	}
+	public void setOutput(String toSet){
+		outputArea.setText(toSet);
+	}
+	
 }
