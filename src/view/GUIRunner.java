@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,7 +16,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -38,30 +38,38 @@ public class GUIRunner {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Text files", "txt", "md", "html", "java", "tex");
 		fc.setFileFilter(filter);
+		
 		openButton.addActionListener(new ActionListener() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int returnVal = fc.showOpenDialog(frame);
+				EventQueue.invokeLater(new Runnable() {
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					file = fc.getSelectedFile();
-					openFile(file);
-				}
+					@Override
+					public void run() {
+						int returnVal = fc.showOpenDialog(frame);
+
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							file = fc.getSelectedFile();
+							openFile(file);
+						}
+					}
+
+				});
 
 			}
 		});
 		saveButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fc.setDialogTitle("Specify a file to save");   
-				 
+				fc.setDialogTitle("Specify a file to save");
+
 				int userSelection = fc.showSaveDialog(frame);
-				 
+
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
-				    File fileToSave = fc.getSelectedFile();
-				    try {
+					File fileToSave = fc.getSelectedFile();
+					try {
 						FileWriter fw = new FileWriter(fileToSave);
 						fw.write("Input:\n");
 						fw.write(mainPanel.getInput());
@@ -74,20 +82,22 @@ public class GUIRunner {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				   
-				    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+
+					System.out.println("Save as file: "
+							+ fileToSave.getAbsolutePath());
 				}
-				
+
 			}
 		});
 		exitButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
-				
+
 			}
 		});
+
 		fileMenu.add(openButton);
 		fileMenu.add(saveButton);
 		fileMenu.add(exitButton);
@@ -101,6 +111,7 @@ public class GUIRunner {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
+
 	public void openFile(File file) {
 		try {
 			Scanner scan = new Scanner(file);
@@ -117,13 +128,14 @@ public class GUIRunner {
 		}
 
 	}
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				new GUIRunner();
-				
+
 			}
 		});
 	}

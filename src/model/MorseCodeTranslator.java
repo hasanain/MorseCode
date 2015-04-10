@@ -1,13 +1,17 @@
 package model;
+import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.print.attribute.standard.RequestingUserName;
+import javax.swing.SwingWorker;
 /**
  * This class is a singleton that translates Morse code to English and vice-versa.
  * 
  * @author Hasanain Jamal
  *
  */
-public class MorseCodeTranslator {
+public class MorseCodeTranslator extends SwingWorker<String, String>{
 	private static Map<Character, String> dictionary;
 	private static Map<String, Character> dict2;
 	//										 a       b      c       d     e     f       g
@@ -26,7 +30,7 @@ public class MorseCodeTranslator {
 	public static String[] morseChars = {".-.-.-", "--..--", "---...", "..--..", ".----.",
 		//     -         /        ()         "        @         =
 			"-....-", "-..-.", "-.--.-", ".-..-.", ".--.-.", "-...-"};
-
+	private String token;
 	/**
 	 * variable to store the singleton instance of the translator
 	 */
@@ -94,9 +98,11 @@ public class MorseCodeTranslator {
 	}
 	
 	public String translateToMorse(String token) {
-		token = token.toLowerCase();
 		StringBuilder translation = new StringBuilder();
-		for (String s : token.split(" ")){
+		
+		int limit = 0;
+		String newToken = token.toLowerCase();
+		for (String s : newToken.split(" ")){
 			char lastChar = '\0';
 			for(char a : s.toCharArray()){
 				if(dictionary.get(a) != null){
@@ -111,11 +117,13 @@ public class MorseCodeTranslator {
 				translation.append(" | ");
 			}
 		}
-		int limit = translation.length();
+		limit = translation.length();
 		if(limit > 4){
 			limit = limit -4;
 		}
+//		System.out.println(translation);
 		return translation.substring(0, limit);
+
 	}
 	public String translateToEnglish(String token){
 		StringBuilder translation = new StringBuilder();
@@ -144,6 +152,18 @@ public class MorseCodeTranslator {
 		return s.matches("[\\(\\)\\.,=\"'@/\\-:]");
 	}
 	public String translate(String token){
+		this.token = token;
+		try {
+			return doInBackground();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	protected String doInBackground() throws Exception {
+		
 		if(isMorse(token)){
 			return this.translateToEnglish(token);
 		}else{

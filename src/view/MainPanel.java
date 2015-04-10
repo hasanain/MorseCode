@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import model.MorseCodeTranslator;
@@ -25,6 +26,7 @@ public class MainPanel extends JPanel {
 
 	private JTextArea inputArea, outputArea;
 	private JPanel inputPanel, outputPanel;
+	private JScrollPane inputPane, outputPane;
 	private MorseCodeTranslator mtr;
 
 	public MainPanel() {
@@ -41,22 +43,28 @@ public class MainPanel extends JPanel {
 		outputPanel = new JPanel(new BorderLayout());
 		outputArea = new JTextArea();
 		outputArea.setEditable(false);
-		outputArea.setSize(new Dimension(100, 150));
-		outputArea.setPreferredSize(new Dimension(100, 150));
+//		outputArea.setSize(new Dimension(100, 150));
+//		outputArea.setPreferredSize(new Dimension(100, 150));
+		
 		outputArea.setLineWrap(true);
 		outputPanel.add(new JLabel("Translated output: "), BorderLayout.NORTH);
-		outputPanel.add(outputArea, BorderLayout.SOUTH);
+		outputPane = new JScrollPane(outputArea);
+		outputPane.setPreferredSize(new Dimension(100,150));
+		outputPanel.add(outputPane, BorderLayout.SOUTH);
 	}
 
 	private void makeInputPanel() {
 		inputPanel = new JPanel(new BorderLayout());
 		inputArea = new JTextArea();
+		
 		inputArea.addKeyListener(new TranslatorController());
-		inputArea.setSize(new Dimension(100, 150));
-		inputArea.setPreferredSize(new Dimension(100, 150));
+//		inputArea.setSize(new Dimension(100, 150));
+//		inputArea.setPreferredSize(new Dimension(100, 150));
 		inputArea.setLineWrap(true);
 		inputPanel.add(new JLabel("Input:"), BorderLayout.NORTH);
-		inputPanel.add(inputArea, BorderLayout.SOUTH);
+		inputPane = new JScrollPane(inputArea);
+		inputPane.setPreferredSize(new Dimension(100,150));
+		inputPanel.add(inputPane, BorderLayout.SOUTH);
 	}
 
 	private void makeModel() {
@@ -81,7 +89,7 @@ public class MainPanel extends JPanel {
 
 		}
 	}
-	public void translate() {
+	public synchronized void translate() {
 		outputArea.setText(mtr.translate(inputArea.getText()));
 	}
 	public String getInput() {
