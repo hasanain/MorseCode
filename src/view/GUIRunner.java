@@ -38,9 +38,9 @@ public class GUIRunner {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Text files", "txt", "md", "html", "java", "tex");
 		fc.setFileFilter(filter);
-		
+
 		openButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
@@ -113,20 +113,27 @@ public class GUIRunner {
 	}
 
 	public void openFile(File file) {
-		try {
-			Scanner scan = new Scanner(file);
-			StringBuilder input = new StringBuilder();
-			while (scan.hasNextLine()) {
-				input.append(scan.nextLine());
-				input.append('\n');
-			}
-			mainPanel.setInput("");
-			mainPanel.setInput(input.toString());
-			mainPanel.translate();
-		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(frame, "File not found!");
-		}
 
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Scanner scan = new Scanner(file);
+					StringBuilder input = new StringBuilder();
+					while (scan.hasNextLine()) {
+						input.append(scan.nextLine());
+						input.append('\n');
+					}
+					mainPanel.setInput("");
+					mainPanel.setInput(input.toString());
+					mainPanel.translate();
+				} catch (FileNotFoundException e) {
+					JOptionPane.showMessageDialog(frame, "File not found!");
+				}
+
+			}
+		}).start();
 	}
 
 	public static void main(String[] args) {

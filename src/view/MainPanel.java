@@ -4,18 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.List;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 
-import model.MorseCodeTranslator;
+import model.EnglishToMorseTranslator;
+import model.MorseToEnglishTranslator;
+import model.Translator;
 
 public class MainPanel extends JPanel {
 
@@ -27,12 +26,14 @@ public class MainPanel extends JPanel {
 	private JTextArea inputArea, outputArea;
 	private JPanel inputPanel, outputPanel;
 	private JScrollPane inputPane, outputPane;
-	private MorseCodeTranslator mtr;
+	private SwingWorker<String, String> worker;
+	private Translator etm, mte;
 
 	public MainPanel() {
 		makeModel();
 		makeInputPanel();
 		makeOutputPanel();
+		worker = new MySwingWorker();
 		this.setLayout(new BorderLayout(5, 5));
 		this.add(inputPanel, BorderLayout.NORTH);
 		this.add(outputPanel, BorderLayout.SOUTH);
@@ -43,32 +44,31 @@ public class MainPanel extends JPanel {
 		outputPanel = new JPanel(new BorderLayout());
 		outputArea = new JTextArea();
 		outputArea.setEditable(false);
-//		outputArea.setSize(new Dimension(100, 150));
-//		outputArea.setPreferredSize(new Dimension(100, 150));
-		
+
 		outputArea.setLineWrap(true);
 		outputPanel.add(new JLabel("Translated output: "), BorderLayout.NORTH);
 		outputPane = new JScrollPane(outputArea);
-		outputPane.setPreferredSize(new Dimension(100,150));
+		outputPane.setPreferredSize(new Dimension(100, 150));
 		outputPanel.add(outputPane, BorderLayout.SOUTH);
 	}
 
 	private void makeInputPanel() {
 		inputPanel = new JPanel(new BorderLayout());
 		inputArea = new JTextArea();
-		
+
 		inputArea.addKeyListener(new TranslatorController());
-//		inputArea.setSize(new Dimension(100, 150));
-//		inputArea.setPreferredSize(new Dimension(100, 150));
+		// inputArea.setSize(new Dimension(100, 150));
+		// inputArea.setPreferredSize(new Dimension(100, 150));
 		inputArea.setLineWrap(true);
 		inputPanel.add(new JLabel("Input:"), BorderLayout.NORTH);
 		inputPane = new JScrollPane(inputArea);
-		inputPane.setPreferredSize(new Dimension(100,150));
+		inputPane.setPreferredSize(new Dimension(100, 150));
 		inputPanel.add(inputPane, BorderLayout.SOUTH);
 	}
 
 	private void makeModel() {
-		mtr = MorseCodeTranslator.getInstance();
+		etm = EnglishToMorseTranslator.getInstance();
+		mte = MorseToEnglishTranslator.getInstance();
 	}
 
 	private class TranslatorController implements KeyListener {
@@ -89,20 +89,87 @@ public class MainPanel extends JPanel {
 
 		}
 	}
+
 	public synchronized void translate() {
-		outputArea.setText(mtr.translate(inputArea.getText()));
+
+		new Thread(new Runnable() {
+			public void run() {
+				long start = System.currentTimeMillis();
+
+				boolean flag = ((MorseToEnglishTranslator) mte)
+						             .isMorse(inputArea.getText());
+				outputArea.setText("");
+				outputArea.repaint();
+				StringBuilder translation = new StringBuilder();
+				for (String s : inputArea.getText().split("\n")) {
+
+					if (flag) {
+						translation.append(mte.translate(s) + "\n");
+					} else {
+						translation.append(etm.translate(s) + "\n");
+					}
+					
+				}
+				outputArea.setText(translation + "\n");
+				// outputArea.repaint();
+				System.out.println(System.currentTimeMillis() - start);
+			}
+
+		}).start();
+
 	}
+
 	public String getInput() {
 		return inputArea.getText();
 	}
-	public void setInput(String toSet){
+
+	public void setInput(String toSet) {
 		inputArea.setText(toSet);
 	}
+
 	public String getOutput() {
 		return outputArea.getText();
 	}
-	public void setOutput(String toSet){
+
+	public void setOutput(String toSet) {
 		outputArea.setText(toSet);
 	}
-	
+
+	private class MySwingWorker extends SwingWorker<String, String> {
+
+		public void process(List<String> chuncks) {
+			for (String s : chuncks) {
+				outputArea.append(s);
+				outputArea.repaint();
+			}
+		}
+
+		@Override
+		protected String doInBackground() throws Exception {
+			System.out.println("hello");
+			new Thread(new Runnable() {
+				public void run() {
+					boolean flag = ((MorseToEnglishTranslator) mte)
+							.isMorse(inputArea.getText());
+					outputArea.setText("");
+					outputArea.repaint();
+					String translation = "";
+					System.out.println("hey");
+					for (String s : inputArea.getText().split("\n")) {
+						System.out.println(s);
+
+						if (flag) {
+							translation = mte.translate(s);
+						} else {
+							translation = etm.translate(s);
+						}
+						publish(translation);
+					}
+				}
+			}).start();
+			return null;
+		}
+
+	}
+
 }
