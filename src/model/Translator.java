@@ -23,4 +23,15 @@ public abstract class Translator {
 	
 	public abstract String translate(String token);
 	
+	public static Translator makeTranslator(int type){
+		if(type == ENGLSIH_TO_MORSE){
+			return EnglishToMorseTranslator.getInstance();
+		}
+		if(type == MORSE_TO_ENGLISH){
+			return MorseToEnglishTranslator.getInstance();
+		}else{
+			return null;
+		}
+	}
+	
 }

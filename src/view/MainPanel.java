@@ -67,8 +67,8 @@ public class MainPanel extends JPanel {
 	}
 
 	private void makeModel() {
-		etm = EnglishToMorseTranslator.getInstance();
-		mte = MorseToEnglishTranslator.getInstance();
+		etm = Translator.makeTranslator(Translator.ENGLSIH_TO_MORSE);
+		mte = Translator.makeTranslator(Translator.MORSE_TO_ENGLISH);
 	}
 
 	private class TranslatorController implements KeyListener {
