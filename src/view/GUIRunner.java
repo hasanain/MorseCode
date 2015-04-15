@@ -68,7 +68,7 @@ public class GUIRunner {
 				int userSelection = fc.showSaveDialog(frame);
 
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
-					File fileToSave = new File(fc.getSelectedFile()+".txt");
+					File fileToSave = new File(fc.getSelectedFile()+ ((fc.getSelectedFile().getPath().contains(".txt")) ? "" : ".txt"));
 					try {
 						FileWriter fw = new FileWriter(fileToSave);
 						fw.write("Input:\n");
