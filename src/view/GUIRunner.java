@@ -70,13 +70,13 @@ public class GUIRunner {
 				int userSelection = fc.showSaveDialog(frame);
 
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
-					File fileToSave = fc.getSelectedFile();
+					File fileToSave = new File(fc.getSelectedFile()+".txt");
 					try {
 						FileWriter fw = new FileWriter(fileToSave);
 						fw.write("Input:\n");
 						fw.write(mainPanel.getInput());
 						fw.write("\n");
-						fw.write("Translation:\n");
+						fw.write("\nTranslation:\n");
 						fw.write(mainPanel.getOutput());
 						fw.write("\n");
 						fw.close();
