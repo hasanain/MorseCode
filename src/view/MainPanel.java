@@ -67,7 +67,7 @@ public class MainPanel extends JPanel {
 	}
 
 	private void makeModel() {
-		etm = Translator.makeTranslator(Translator.ENGLSIH_TO_MORSE);
+		etm = Translator.makeTranslator(Translator.ENGLISH_TO_MORSE);
 		mte = Translator.makeTranslator(Translator.MORSE_TO_ENGLISH);
 	}
 
