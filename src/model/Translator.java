@@ -18,11 +18,13 @@ public abstract class Translator {
 		//     -         /        ()         "        @         =
 			"-....-", "-..-.", "-.--.-", ".-..-.", ".--.-.", "-...-"};
 	
+	//Types of Translators this factory can make
 	public static int ENGLSIH_TO_MORSE = 0x0;
 	public static int MORSE_TO_ENGLISH = 0x1;
 	
 	public abstract String translate(String token);
-	
+	// TODO 2: Talk about this factory that we have here
+	// Look at the Abstract type it returns and the argument that it takes
 	public static Translator makeTranslator(int type){
 		if(type == ENGLSIH_TO_MORSE){
 			return EnglishToMorseTranslator.getInstance();

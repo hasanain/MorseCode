@@ -27,6 +27,8 @@ public class MainPanel extends JPanel {
 	private JPanel inputPanel, outputPanel;
 	private JScrollPane inputPane, outputPane;
 	private SwingWorker<String, String> worker;
+	
+	//TODO 3: Talk about etm (English to Morse) and mte (Morse to English) Translators
 	private Translator etm, mte;
 
 	public MainPanel() {
@@ -57,15 +59,12 @@ public class MainPanel extends JPanel {
 		inputArea = new JTextArea();
 
 		inputArea.addKeyListener(new TranslatorController());
-		// inputArea.setSize(new Dimension(100, 150));
-		// inputArea.setPreferredSize(new Dimension(100, 150));
 		inputArea.setLineWrap(true);
 		inputPanel.add(new JLabel("Input:"), BorderLayout.NORTH);
 		inputPane = new JScrollPane(inputArea);
 		inputPane.setPreferredSize(new Dimension(100, 150));
 		inputPanel.add(inputPane, BorderLayout.SOUTH);
 	}
-
 	private void makeModel() {
 		etm = Translator.makeTranslator(Translator.ENGLSIH_TO_MORSE);
 		mte = Translator.makeTranslator(Translator.MORSE_TO_ENGLISH);

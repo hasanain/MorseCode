@@ -21,14 +21,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUIRunner {
 
-	private JFrame frame;
-	private MainPanel mainPanel;
-	private JMenuBar menu;
+	private JFrame frame; // frame enclosing the application
+	private MainPanel mainPanel; // an instance of the main panel
+	private JMenuBar menu; // menu bar at the top
 	JFileChooser fc = new JFileChooser();
 	File file;
-
+	// TODO 1: Run the GUI and type some English and Morse code into it
+	// Explain the purpose of the program and 
 	public GUIRunner() {
 		frame = new JFrame();
+		
 		frame.setLayout(new BorderLayout());
 		menu = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
@@ -102,6 +104,7 @@ public class GUIRunner {
 		fileMenu.add(exitButton);
 		menu.add(fileMenu);
 		mainPanel = new MainPanel();
+		frame.setTitle("Translator");
 		frame.add(menu, BorderLayout.NORTH);
 		frame.add(mainPanel, BorderLayout.SOUTH);
 		frame.pack();
@@ -110,7 +113,8 @@ public class GUIRunner {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
-
+	//TODO 6: (optional) speak about threads and their importance.
+	// opening a large file can cause the GUI to freeze
 	public void openFile(File file) {
 
 		new Thread(new Runnable() {

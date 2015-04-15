@@ -7,6 +7,8 @@ public final class EnglishToMorseTranslator extends Translator {
 	private static Map<Character, String> dictionary;
 	private static EnglishToMorseTranslator instance;
 	
+	
+	// TODO 5: look at this private constructor an important part of singleton
 	private EnglishToMorseTranslator(){
 		makeDictionary();
 	}
@@ -33,6 +35,7 @@ public final class EnglishToMorseTranslator extends Translator {
 		dictionary.put('@', morseChars[9]);
 		dictionary.put('=', morseChars[10]);
 	}
+	
 	public synchronized String translate(String token) {
 		StringBuilder translation = new StringBuilder();
 		
@@ -64,7 +67,8 @@ public final class EnglishToMorseTranslator extends Translator {
 		String s = String.valueOf(c);
 		return s.matches("[\\(\\)\\.,=\"'@/\\-:]");
 	}
-
+	// TODO 4: This factory is also a singleton!
+	// You can see that this is a getInstance class
 	public static EnglishToMorseTranslator getInstance() {
 		if(instance == null){
 			instance = new EnglishToMorseTranslator();
