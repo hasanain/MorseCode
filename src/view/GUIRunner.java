@@ -68,7 +68,8 @@ public class GUIRunner {
 				int userSelection = fc.showSaveDialog(frame);
 
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
-					File fileToSave = new File(fc.getSelectedFile()+ ((fc.getSelectedFile().getPath().contains(".txt")) ? "" : ".txt"));
+					String extension = ensureFileExtentsion();
+					File fileToSave = new File(fc.getSelectedFile()+ extension);
 					try {
 						FileWriter fw = new FileWriter(fileToSave);
 						fw.write("Input:\n");
@@ -86,6 +87,16 @@ public class GUIRunner {
 							+ fileToSave.getAbsolutePath());
 				}
 
+			}
+
+			private String ensureFileExtentsion() {
+				String extension;
+				if(fc.getSelectedFile().getPath().endsWith(".txt")){
+					extension = "";
+				}else{
+					extension = ".txt";
+				}
+				return extension;
 			}
 		});
 		exitButton.addActionListener(new ActionListener() {
